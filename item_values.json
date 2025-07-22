@@ -14,5 +14,13 @@
   "sweater": 100,
   "blazer": 120,
   "shirt": 100,
-  "loafers": 120
+  "loafers": 120,
+  "t-shirt": 30,
+  "trench coat": 140,
+  "cardigan": 80,
+  "vest": 40,
+  "oxford": 100,
+  "crewneck": 70,
+  "jersey": 30,
+  "workwear": 80
 }
