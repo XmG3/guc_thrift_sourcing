@@ -1,5 +1,10 @@
 import json
 
+#work in progress: title keyword dictionary
+    #"made in italy", "retro", "selvedge"
+
+#findCompletedItem API for historical dataset and prices
+
 #open brands file
 with open("brands.txt", "r", encoding="utf-8") as f:
     known_brands = {
@@ -23,6 +28,7 @@ def classify_item_type(title):
 def score(title, price, condition, seller_score, brand, vintage_status):
     score = 0
 
+    #title/price score
     item_type = classify_item_type(title)
     if item_type:
         good_price = item_values[item_type]
