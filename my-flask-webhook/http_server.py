@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 import hashlib
 import os
 import logging
@@ -23,16 +23,18 @@ def account_deletion():
     try:
         if request.method == "GET":
             # eBay validation request
-            challenge = request.args.get("challengeCode")
+            challenge_code = request.args.get("challenge_code")
             
-            if not challenge:
-                logger.error("Missing challengeCode in GET request")
-                return Response("Missing challengeCode", status=400)
+            if not challenge_code:
+                logger.error("Missing challenge_code in GET request")
+                logger.error(f"Query params received: {request.args}")
+                return Response("Missing challenge_code", status=400)
             
-            logger.info(f"Received challenge code: {challenge}")
+            logger.info(f"Received challenge code: {challenge_code}")
             
             # Compute SHA-256 hash as per eBay specification
-            hash_string = challenge + VERIFICATION_TOKEN + ENDPOINT_URL
+            # Order: challengeCode + verificationToken + endpoint
+            hash_string = challenge_code + VERIFICATION_TOKEN + ENDPOINT_URL
             logger.info(f"Hash string: {hash_string}")
             
             m = hashlib.sha256(hash_string.encode("utf-8"))
@@ -40,8 +42,10 @@ def account_deletion():
             
             logger.info(f"Generated hash: {response_hash}")
             
-            # Return plain text response
-            return Response(response_hash, status=200, mimetype='text/plain')
+            # Return JSON response with challengeResponse field
+            response_data = {"challengeResponse": response_hash}
+            
+            return jsonify(response_data), 200, {'Content-Type': 'application/json'}
         
         elif request.method == "POST":
             # Handle actual deletion notifications
@@ -67,6 +71,23 @@ def account_deletion():
 @app.route("/health")
 def health_check():
     return {"status": "healthy"}, 200
+
+# Test endpoint to verify hash calculation manually
+@app.route("/test-hash")
+def test_hash():
+    # For testing purposes - remove in production
+    test_challenge = "test123"
+    hash_string = test_challenge + VERIFICATION_TOKEN + ENDPOINT_URL
+    m = hashlib.sha256(hash_string.encode("utf-8"))
+    response_hash = m.hexdigest()
+    
+    return {
+        "test_challenge": test_challenge,
+        "verification_token": VERIFICATION_TOKEN,
+        "endpoint_url": ENDPOINT_URL,
+        "hash_string": hash_string,
+        "response_hash": response_hash
+    }
 
 # Error handlers
 @app.errorhandler(404)
