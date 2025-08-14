@@ -14,21 +14,14 @@ def index():
 
 @app.route("/account-deletion", methods=["GET", "POST"])
 @app.route("/account-deletion/", methods=["GET", "POST"])
+
 def account_deletion():
     if request.method == "GET":
-        # eBay validation step: challenge_code comes as query param
-        challenge_code = request.args.get("challenge_code", "")
-        # Compute hash: SHA256(challengeCode + verificationToken + endpointURL)
-        combined = (challenge_code + VERIFICATION_TOKEN + ENDPOINT_URL).encode('utf-8')
-        response_hash = hashlib.sha256(combined).hexdigest()
-        return jsonify({"challengeResponse": response_hash}), 200
-
+        return "Validation successful", 200
     elif request.method == "POST":
-        # Real account deletion notification from eBay
-        notification = request.get_json()
-        print("Received deletion notification:", notification)
-        # TODO: delete user data here, if you store any
-        return Response(status=200)
+        data = request.get_json()
+        # optional: process deletion data here
+        return "", 200
 
     # For any other method
     return Response(status=400)
