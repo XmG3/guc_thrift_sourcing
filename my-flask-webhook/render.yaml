@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: ebay-webhook
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn http_server:app
+    plan: free
