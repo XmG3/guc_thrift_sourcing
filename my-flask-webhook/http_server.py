@@ -3,7 +3,7 @@ import hashlib
 
 # Replace these with your actual values
 VERIFICATION_TOKEN = "dznrOg44uA4NewgrbkYEvGn2srsrpOIi"
-ENDPOINT_URL = "https://fe681c91b7b6.ngrok-free.app/account-deletion"  # without trailing slash
+ENDPOINT_URL = "https://guc-thrift-sourcing.onrender.com/account-deletion"  # without trailing slash
 
 app = Flask(__name__)
 
