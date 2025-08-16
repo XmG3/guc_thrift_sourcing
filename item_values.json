@@ -23,5 +23,18 @@
   "crewneck": 70,
   "jersey": 30,
   "workwear": 80,
-  "shorts": 45
+  "shorts": 45,
+  "west": 50,
+  "half-zip": 90,
+  "coat": 110,
+  "parka": 110,
+  "windbreaker": 80,
+  "sweatshirt": 50,
+  "suit pants": 110,
+  "suit jacket": 110,
+  "overalls": 70,
+  "mini skirt": 80,
+  "cargos": 80,
+  "bra": 25,
+  "lingerie set": 90
 }
