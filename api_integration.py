@@ -40,7 +40,7 @@ class EbayAPI:
     
     def search_items(self, query, category_id = None, max_results = 200, marketplace = 'EBAY_DE'):
         if not self.oauth_token:
-            self.get_oauth_token()
+            self.get_oauth()
         
         url = f"{self.base_url}/buy/browse/v1/item_summary/search"
 
