@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv("keys.env")
 
 APP_ID = os.getenv("EBAY_APP_ID")
 CERT_ID = os.getenv("EBAY_CERT_ID")
