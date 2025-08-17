@@ -1,4 +1,5 @@
 import requests
+import os
 import base64
 import json
 from api_config import APP_ID, CERT_ID, DEV_ID, OAUTH_TOKEN
@@ -11,6 +12,16 @@ class EbayAPI:
         self.oauth_token = OAUTH_TOKEN
     
         self.base_url = "https://api.ebay.com"
+
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        brands_path = os.path.join(script_dir, "brands.txt")
+
+        with open(brands_path, "r", encoding="utf-8") as f:
+            self.known_brands = {
+                line.strip().lower()
+                for line in f
+                if line.strip() and not line.strip().startswith('#')
+            }
     
     def get_oauth(self):
         url = f"{self.base_url}/identity/v1/oauth2/token"
@@ -67,7 +78,7 @@ class EbayAPI:
     
     def get_details(self, item_id): 
         if not self.oauth_token:
-            self.get_oauth_token()
+            self.get_oauth()
             
         url = f"{self.base_url}/buy/browse/v1/item/{item_id}"
         
@@ -83,7 +94,7 @@ class EbayAPI:
         else:
             raise Exception(f"Item details failed: {response.status_code} - {response.text}")
         
-    def extract_item_data(self, api_item, known_brands):
+    def extract_item_data(self, api_item):
         try:
             title = api_item.get('title', '')
             
@@ -115,11 +126,8 @@ class EbayAPI:
             
             # Brand detection from title
             brand = api_item.get('brand', '')
-            title_words = title.lower().split()
-            for word in title_words:
-                if word in known_brands:
-                    brand = word
-                    break
+            if not brand:
+                brand = self.detect_brand(title)
             
             # Vintage detection
             vintage_status = 'vintage' if 'vintage' in title.lower() or 'retro' in title.lower() else None
@@ -139,3 +147,18 @@ class EbayAPI:
         except Exception as e:
             print(f"Error extracting item data: {e}")
             return None
+        
+    def detect_brand(self, title):
+        title_lower = title.lower()
+        title_words = title_lower.split()
+
+        for word in title_words:
+            clean_word = ''.join(c for c in word if c.isalnum())
+            if clean_word in self.known_brands:
+                return clean_word.title()
+        
+        for brand in self.known_brands:
+            if brand in title_lower:
+                return brand.title()
+            
+        return "None"
