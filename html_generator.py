@@ -137,7 +137,6 @@ class HTMLGenerator:
             <div class="details">Condition: {item['condition']}</div>
             <div class="details">Brand: {item.get('brand', 'Unknown')} | Type: {item.get('item_type', 'Unknown')}</div>
             <div class="details">Seller Score: {item['seller_score']:.1f}/5.0</div>
-            <div class="details">Location: {item.get('location', 'Unknown')}</div>
         </div>
     </div>"""
 
