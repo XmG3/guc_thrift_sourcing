@@ -2,3 +2,4 @@ RETIRED_runner.py
 RETIRED_vinted_scraper.py
 RETIRED_willhaben_scraper.py
 keys.env
+__pycache__/
