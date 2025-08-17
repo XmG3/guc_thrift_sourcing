@@ -114,7 +114,7 @@ class EbayAPI:
             seller_score = feedback_percentage / 20.0  # Convert 0-100% to 0-5 scale
             
             # Brand detection from title
-            brand = None
+            brand = api_item.get('brand', '')
             title_words = title.lower().split()
             for word in title_words:
                 if word in known_brands:
