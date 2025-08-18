@@ -25,7 +25,7 @@ with open(values_path, "r", encoding="utf-8") as f:
     item_values = json.load(f)
 
 #default filters
-DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle", "printed"]
+DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle", "printed", "S M L", "S M L XL"]
 DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21", "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Topshop", "Mango"]
 
 
