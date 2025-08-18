@@ -25,7 +25,7 @@ with open(values_path, "r", encoding="utf-8") as f:
     item_values = json.load(f)
 
 #default filters
-DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle"]
+DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle", "printed"]
 DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21", "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Topshop", "Mango"]
 
 
@@ -83,7 +83,7 @@ def score(title, price, condition, seller_score, brand, vintage_status):
     #brand score
     if brand and brand.strip():
         if brand.lower() in known_brands:
-            score += 4
+            score += 6
 
     #vintage status
     if vintage_status == 'vintage':
