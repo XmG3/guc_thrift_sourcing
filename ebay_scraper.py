@@ -25,8 +25,8 @@ with open(values_path, "r", encoding="utf-8") as f:
     item_values = json.load(f)
 
 #default filters
-DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle", "printed", "S M L", "S M L XL"]
-DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21", "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Topshop", "Mango"]
+DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle", "printed", "S M L", "S M L XL", "barbie", "disney", "mattel", "doll", "toy"]
+DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21", "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Gant", "Mango"]
 
 
 #basic item type classifer
@@ -37,7 +37,8 @@ def classify_item_type(title):
             return item_type
     return None
 
-def score(title, price, condition, seller_score, brand, vintage_status):
+def score(title, price, raw_condition, seller_score, brand, vintage_status):
+    condition = raw_condition.lower()
     score = 0
 
     #title/price score
@@ -58,20 +59,17 @@ def score(title, price, condition, seller_score, brand, vintage_status):
             score -= 3 #way overpriced
 
     #condition score
-    if condition == 'Gut':
-        score += 3
-    elif condition == 'Hervorragend':
-        score += 4
-    elif condition == 'Gebraucht':
-        score += 3
-    elif condition == 'Neu mit Etikett':
-        score -= 3
-    elif condition == 'Neu ohne Etikett':
-        score -= 2
-    elif condition == 'Neu mit Karton':
-        score -= 2
-    elif condition == 'Neu ohne Karton':
-        score -= 2
+    #condition score
+    if condition in ['NEW', 'NEW_OTHER', 'NEW_WITH_DEFECTS']:
+        score -= 3  # Penalize new items 
+    elif condition in ['USED_EXCELLENT', 'PRE_OWNED_EXCELLENT', 'LIKE_NEW']:
+        score += 4  # Best used condition
+    elif condition in ['USED_VERY_GOOD', 'USED_GOOD']:
+        score += 3  # Good used condition
+    elif condition in ['SELLER_REFURBISHED', 'CERTIFIED_REFURBISHED', 'USED_ACCEPTABLE']:
+        score += 2  # Still usable
+    elif condition == 'FOR_PARTS_OR_NOT_WORKING':
+        score -= 2  # Broken items
     pass
 
     #seller score
@@ -112,11 +110,11 @@ def apply_filters(items):
     
     return filtered_items
 
-def search_ebay(query, max_results=400, min_score = 0):
+def search_ebay(query, max_results=600, min_score = 3):
     ebay_api = EbayAPI()
 
     print(f"Searching eBay.at for '{query}'.")
-    results = ebay_api.search_items(query, max_results=max_results)
+    results = ebay_api.search_items(query, max_results=max_results, marketplace = ['EBAY_AT', 'EBAY_DE', 'EBAY_IT', 'EBAY_FR'])
 
     items = results['itemSummaries']
     scored_items = []
@@ -128,7 +126,7 @@ def search_ebay(query, max_results=400, min_score = 0):
             item_score, item_type = score(
                 item_data['title'],
                 item_data['price'],
-                item_data['condition'],
+                item_data['raw_condition'],
                 item_data['seller_score'],
                 item_data['brand'],
                 item_data['vintage_status']
@@ -146,7 +144,7 @@ def search_ebay(query, max_results=400, min_score = 0):
 
 def main():
     query = input("Enter search query: ")
-    results = search_ebay(query, max_results = 200, min_score=0)
+    results = search_ebay(query, max_results = 600, min_score=0)
     if results:
         create_html(results, "ebay_results.html", query)
     

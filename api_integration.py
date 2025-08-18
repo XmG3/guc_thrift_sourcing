@@ -2,6 +2,7 @@ import requests
 import os
 import base64
 import json
+import time
 from api_config import APP_ID, CERT_ID, DEV_ID, OAUTH_TOKEN
 
 
@@ -51,32 +52,81 @@ class EbayAPI:
             raise Exception(f"Failed to get OAuth token: {response.status_code} - {response.text}")
         
     
-    def search_items(self, query, category_id = None, max_results = 200, marketplace = 'EBAY_AT'):
+    def search_items(self, query, category_id=None, max_results=200, marketplace='EBAY_DE'):
+    # For backward compatibility, if only one marketplace specified
+        if isinstance(marketplace, str):
+            return self.search_single_market(query, category_id, max_results, marketplace)
+        
+        # Multi-marketplace search
+        if isinstance(marketplace, list) and len(marketplace) == 2:
+            return self.search_multi_market(query, category_id, max_results, marketplace)
+        
+        # Default fallback
+        return self.search_single_market(query, category_id, max_results, 'EBAY_DE')
+
+    def search_single_market(self, query, category_id = None, max_results = 200, marketplace = 'EBAY_DE'):
         if not self.oauth_token:
             self.get_oauth()
+
+        all_items = []
+        offset = 0
+        limit_per_request = 200
+
+        while len(all_items) < max_results:
+            remaining = max_results - len(all_items)
+            current_limit = min(limit_per_request, remaining)
+            
+            url = f"{self.base_url}/buy/browse/v1/item_summary/search"
+            headers = {
+                'Authorization': f'Bearer {self.oauth_token}',
+                'Content-Type': 'application/json',
+                'X-EBAY-C-MARKETPLACE-ID': marketplace
+            }
+            params = {
+                'q': query,
+                'limit': current_limit,
+                'offset': offset
+            }
+            if category_id:
+                params['category_ids'] = category_id
+
+            response = requests.get(url, headers=headers, params=params)
+            
+            if response.status_code == 429:
+                time.sleep(60)
+                continue
+            elif response.status_code != 200:
+                raise Exception(f"Failed to search items: {response.status_code} - {response.text}")
+            
+            data = response.json()
+            if 'itemSummaries' not in data or not data['itemSummaries']:
+                break
+                
+            all_items.extend(data['itemSummaries'])
+            
+            if len(data['itemSummaries']) < current_limit:
+                break
+                
+            offset += current_limit
+            
+            if max_results > 200:
+                time.sleep(0.1)
         
-        url = f"{self.base_url}/buy/browse/v1/item_summary/search"
+        return {'itemSummaries': all_items, 'total': len(all_items)}
+    
+    def search_multi_market(self, query, category_id, max_results, markets= ['EBAY_DE', 'EBAY.AT']):
+        results_per_market = max_results // len(markets)
+        all_items = []
+        seen_ids = set()
 
-        headers = {
-            'Authorization': f'Bearer {self.oauth_token}',
-            'Content-Type': 'application/json',
-            'X-EBAY-C-MARKETPLACE-ID': marketplace
-        }
-
-        params = {
-            'q': query,
-            'limit': min(max_results, 200)
-        }
-
-        if category_id:
-            params['category_ids'] = category_id
-
-        response = requests.get(url, headers=headers, params = params)
-
-        if response.status_code == 200:
-            return response.json()
-        else:
-            raise Exception(f"Failed to search items: {response.status_code} - {response.text}")
+        for market in markets:
+            market_results = self.search_single_market(query, category_id, max_results, market)
+            for item in market_results['itemSummaries']:
+                item_id = item.get('itemId')
+                if item_id and item_id not in seen_ids:
+                    seen_ids.add(item_id)
+                    all_items.append(item)
+        return {'itemSummaries': all_items, 'total': len(all_items)}
     
     def get_details(self, item_id): 
         if not self.oauth_token:
@@ -105,7 +155,7 @@ class EbayAPI:
             price = float(price_info.get('value', 0)) if price_info else 0
             
             # Condition mapping from eBay API to your system
-            condition = api_item.get('condition', '')
+            raw_condition = api_item.get('condition', '')
             condition_map = {
                 'NEW': 'Hervorragend',
                 'NEW_OTHER': 'Hervorragend',
@@ -118,7 +168,7 @@ class EbayAPI:
                 'USED_ACCEPTABLE': 'Akzeptabel',
                 'FOR_PARTS_OR_NOT_WORKING': 'Defekt'
             }
-            mapped_condition = condition_map.get(condition, condition)
+            mapped_condition = condition_map.get(raw_condition, raw_condition)
             
             # Seller info
             seller_info = api_item.get('seller', {})
@@ -137,6 +187,7 @@ class EbayAPI:
             return {
                 'title': title,
                 'price': price,
+                'raw_condition': raw_condition,
                 'condition': mapped_condition,
                 'seller_score': seller_score,
                 'brand': brand,

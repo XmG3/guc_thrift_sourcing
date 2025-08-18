@@ -157,9 +157,7 @@ class HTMLGenerator:
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(html_content)
         
-        print(f"HTML results created: {filename}")
-        print(f"Open {filename} in your browser to view results with clickable links!")
-        
+        print(f"HTML creation successful.")        
         return filename
 
 # Convenience function for backward compatibility
