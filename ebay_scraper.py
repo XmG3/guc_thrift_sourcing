@@ -102,6 +102,9 @@ def apply_filters(items):
         if any (keyword.lower() in title_lower for keyword in DEFAULT_EXCLUDE_KEYWORDS):
                 continue
         
+        if any (keyword.lower() in title_lower for keyword in DEFAULT_EXCLUDE_BRANDS):
+                continue
+        
         if any (brand.lower() in brand_lower for brand in DEFAULT_EXCLUDE_BRANDS):
                 continue
     
