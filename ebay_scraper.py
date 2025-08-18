@@ -24,6 +24,11 @@ with open(brands_path, "r", encoding="utf-8") as f:
 with open(values_path, "r", encoding="utf-8") as f:
     item_values = json.load(f)
 
+#default filters
+DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle"]
+DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21", "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Topshop", "Mango"]
+
+
 #basic item type classifer
 def classify_item_type(title):
     title_lower = title.lower()
@@ -86,6 +91,24 @@ def score(title, price, condition, seller_score, brand, vintage_status):
     
     return score, item_type
 
+def apply_filters(items):
+    """Filtering items based on unwanted keywords, brands, and potential resellers."""
+    filtered_items = []
+
+    for item in items:
+        title_lower = item['title'].lower()
+        brand_lower = item['brand'].lower() if item['brand'] != 'None' else ''
+
+        if any (keyword.lower() in title_lower for keyword in DEFAULT_EXCLUDE_KEYWORDS):
+                continue
+        
+        if any (brand.lower() in brand_lower for brand in DEFAULT_EXCLUDE_BRANDS):
+                continue
+    
+        filtered_items.append(item)
+    
+    return filtered_items
+
 def search_ebay(query, max_results=400, min_score = 0):
     ebay_api = EbayAPI()
 
@@ -114,7 +137,8 @@ def search_ebay(query, max_results=400, min_score = 0):
                 scored_items.append(item_data)
             
     scored_items.sort(key = lambda x: x['score'], reverse = True)
-    return scored_items
+    filtered_items = apply_filters(scored_items)
+    return filtered_items
 
 
 def main():

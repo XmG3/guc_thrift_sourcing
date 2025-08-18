@@ -4,6 +4,7 @@ import base64
 import json
 from api_config import APP_ID, CERT_ID, DEV_ID, OAUTH_TOKEN
 
+
 class EbayAPI:
     def __init__(self):
         self.app_id = APP_ID
@@ -48,8 +49,9 @@ class EbayAPI:
             return self.oauth_token
         else:
             raise Exception(f"Failed to get OAuth token: {response.status_code} - {response.text}")
+        
     
-    def search_items(self, query, category_id = None, max_results = 200, marketplace = 'EBAY_DE'):
+    def search_items(self, query, category_id = None, max_results = 200, marketplace = 'EBAY_AT'):
         if not self.oauth_token:
             self.get_oauth()
         
