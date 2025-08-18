@@ -155,20 +155,7 @@ class EbayAPI:
             price = float(price_info.get('value', 0)) if price_info else 0
             
             # Condition mapping from eBay API to your system
-            raw_condition = api_item.get('condition', '')
-            condition_map = {
-                'NEW': 'Hervorragend',
-                'NEW_OTHER': 'Hervorragend',
-                'NEW_WITH_DEFECTS': 'Gut',
-                'MANUFACTURER_REFURBISHED': 'Gut',
-                'SELLER_REFURBISHED': 'Gut',
-                'USED_EXCELLENT': 'Hervorragend',
-                'USED_VERY_GOOD': 'Gut',
-                'USED_GOOD': 'Gut',
-                'USED_ACCEPTABLE': 'Akzeptabel',
-                'FOR_PARTS_OR_NOT_WORKING': 'Defekt'
-            }
-            mapped_condition = condition_map.get(raw_condition, raw_condition)
+            condition = api_item.get('condition', '')
             
             # Seller info
             seller_info = api_item.get('seller', {})
@@ -187,8 +174,7 @@ class EbayAPI:
             return {
                 'title': title,
                 'price': price,
-                'raw_condition': raw_condition,
-                'condition': mapped_condition,
+                'condition': condition,
                 'seller_score': seller_score,
                 'brand': brand,
                 'vintage_status': vintage_status,

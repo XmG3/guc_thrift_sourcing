@@ -37,8 +37,8 @@ def classify_item_type(title):
             return item_type
     return None
 
-def score(title, price, raw_condition, seller_score, brand, vintage_status):
-    condition = raw_condition.lower()
+def score(title, price, condition, seller_score, brand, vintage_status):
+    
     score = 0
 
     #title/price score
@@ -113,7 +113,7 @@ def apply_filters(items):
 def search_ebay(query, max_results=600, min_score = 3):
     ebay_api = EbayAPI()
 
-    print(f"Searching eBay.at for '{query}'.")
+    print(f"Searching eBay markets for '{query}'.")
     results = ebay_api.search_items(query, max_results=max_results, marketplace = ['EBAY_AT', 'EBAY_DE', 'EBAY_IT', 'EBAY_FR'])
 
     items = results['itemSummaries']
@@ -126,7 +126,7 @@ def search_ebay(query, max_results=600, min_score = 3):
             item_score, item_type = score(
                 item_data['title'],
                 item_data['price'],
-                item_data['raw_condition'],
+                item_data['condition'],
                 item_data['seller_score'],
                 item_data['brand'],
                 item_data['vintage_status']
