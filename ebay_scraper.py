@@ -156,7 +156,7 @@ def main():
     if results:
         create_html(results, "ebay_results.html", query)
     
-    print(f"the first items brand is: {results[0]['brand']}")
+    print(f"the first items brand is {results[0]['brand']}, with a score of {results[0]['score']}.")
 
 if __name__ == "__main__":
     main()
