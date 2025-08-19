@@ -121,7 +121,7 @@ def apply_filters(items):
 def search_ebay(query, max_results=600, min_score = 3):
     ebay_api = EbayAPI()
 
-    print(f"Searching eBay markets for '{query}'.")
+    print(f"Searching eBay.")
     results = ebay_api.search_items(query, max_results=max_results, marketplace = ['EBAY_FR', 'EBAY_IT', 'EBAY_DE', 'EBAY_AT'])
 
     items = results['itemSummaries']
