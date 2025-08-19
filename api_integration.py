@@ -58,7 +58,7 @@ class EbayAPI:
             return self.search_single_market(query, category_id, max_results, marketplace)
         
         # Multi-marketplace search
-        if isinstance(marketplace, list) and len(marketplace) == 2:
+        if isinstance(marketplace, list) and len(marketplace) == 4:
             return self.search_multi_market(query, category_id, max_results, marketplace)
         
         # Default fallback
@@ -120,7 +120,7 @@ class EbayAPI:
         seen_ids = set()
 
         for market in markets:
-            market_results = self.search_single_market(query, category_id, max_results, market)
+            market_results = self.search_single_market(query, category_id, results_per_market, market)
             for item in market_results['itemSummaries']:
                 item_id = item.get('itemId')
                 if item_id and item_id not in seen_ids:
