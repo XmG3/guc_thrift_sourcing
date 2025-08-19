@@ -27,7 +27,7 @@ with open(values_path, "r", encoding="utf-8") as f:
 #default filters
 DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle", "printed", "S M L", "S M L XL", "barbie", "disney", "mattel", "doll", "toy"]
 DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21", "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Gant", "Mango"]
-DEFAULT_LIKED_KEYWORDS = ["vintage", "retro", "selvedge", "made in italy", "made in france", "made in japan", "rare", "archive", 
+DEFAULT_LIKED_KEYWORDS = ["selvedge", "made in italy", "made in france", "made in japan", "rare", "archive", 
                           "tailored", "alta moda", "archiv", "archivio"]
 
 
@@ -86,10 +86,13 @@ def score(title, price, condition, seller_score, brand, vintage_status):
             score += 6
 
     #vintage status
-    title_lower = title.lower()
     if vintage_status == 'vintage':
         score += 8
-    elif any (keyword.lower() in title_lower for keyword in DEFAULT_LIKED_KEYWORDS):
+    
+    #liked keywords
+    title_lower = title.lower()
+    
+    if vintage_status != 'vintage' and any (keyword.lower() in title_lower for keyword in DEFAULT_LIKED_KEYWORDS):
         score += 6
     
     return score, item_type
