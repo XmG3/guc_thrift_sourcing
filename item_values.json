@@ -1,12 +1,14 @@
 {
   "leather jacket": 120,
   "pleated trousers": 130,
-  "trousers": 110,
+  "trousers": 130,
   "jeans": 60,
   "sneakers": 100,
   "boots": 140,
   "mules": 120,
   "heels": 140,
+  "high heels": 140,
+  "stiletto": 140,
   "heel": 140,
   "heel boots": 140,
   "slingback": 120,
@@ -20,6 +22,10 @@
   "sweater": 100,
   "blazer": 120,
   "shirt": 100,
+  "shirts": 100,
+  "blouse": 75,
+  "dress shirt": 90,
+  "suit": 135,
   "loafers": 120,
   "t-shirt": 30,
   "trench coat": 140,
@@ -42,5 +48,9 @@
   "mini skirt": 80,
   "cargos": 80,
   "bra": 25,
-  "lingerie set": 90
+  "lingerie set": 90,
+  "lingerie": 65,
+  "bikini": 60,
+  "rugby shirt": 60,
+  "work jacket": 80
 }

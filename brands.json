@@ -1,6 +1,6 @@
 {
   "s_tier": {
-    "score": 15,
+    "rating": 10,
     "brands": [
       "rick owens", "chanel", "dior", "maison margiela", "martin margiela", 
       "mm6", "prada", "louis vuitton", "hermes", "hermès", "fendi",
@@ -13,7 +13,7 @@
     ]
   },
   "a_tier": {
-    "score": 12,
+    "rating": 8,
     "brands": [
       "dries van noten", "ann demeulemeester", "helmut lang", "jil sander", "lemaire",  
       "alexander mcqueen", "jean paul gaultier", "comme des garçons", "comme des garcons", 
@@ -23,7 +23,7 @@
     ]
   },
   "b_tier": {
-    "score": 8,
+    "rating": 6,
     "brands": [
       "hugo boss", "armani", "diesel", "burberry", "moschino", "lieve von gorp",
       "tommy hilfiger", "calvin klein", "ralph lauren", "coach", "dirk bikkembergs", 
@@ -33,9 +33,9 @@
     ]
   },
   "mid_tier": {
-    "score": 5,
+    "rating": 4,
     "brands": [
-    "gant", "energie", "cp company", "rabanne", 
+    "energie", "cp company", "rabanne", 
     "ll bean", "rene caovilla", "rené caovilla", "blumarine", 
     "vicini", "le silla", "frankies bikinis", "carhartt",
     "romeo gigli", "delpozo", "mirror palais", 

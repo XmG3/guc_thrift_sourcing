@@ -9,16 +9,16 @@ from html_generator import create_html
 #findCompletedItem API for historical dataset and prices
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-brands_path = os.path.join(script_dir, "brands.txt")
+brands_path = os.path.join(script_dir, "brands.json")
 values_path = os.path.join(script_dir, "item_values.json")
 
 #open brands file
 with open(brands_path, "r", encoding="utf-8") as f:
-    known_brands = {
-        line.strip().lower()
-        for line in f
-        if line.strip() and not line.strip().startswith('#')
-    }
+    brand_data = json.load(f)
+
+    known_brands = set()
+    for tier in brand_data.values():
+        known_brands.update(brand.lower() for brand in tier['brands'])
 
 #open json file
 with open(values_path, "r", encoding="utf-8") as f:
@@ -50,17 +50,16 @@ def score(title, price, condition, brand, vintage_status, purchase_method):
         price_ratio = good_price / price if price > 0 else 0
 
         if price_ratio >= 1.5:
-            score +=5 #good deal
+            score +=8 #good deal
         elif price_ratio >= 1.2:
-            score += 3
-        elif price_ratio >= 0.9:
-            score += 1
+            score += 4
+        elif price_ratio >= 1.0:
+            score += 2
         elif price_ratio >= 0.7:
-            score -= 1
+            score -= 2
         else:
-            score -= 3 #way overpriced
+            score -= 4 #way overpriced
 
-    #condition score
     #condition score
     if condition in ['NEW', 'NEW_OTHER', 'NEW_WITH_DEFECTS']:
         score -= 3  # Penalize new items 
@@ -76,8 +75,12 @@ def score(title, price, condition, brand, vintage_status, purchase_method):
 
     #brand score
     if brand and brand.strip():
-        if brand.lower() in known_brands:
-            score += 6
+        brand_lower = brand.lower()
+        for tier in brand_data.values():
+            tier_brands_lower = [b.lower() for b in tier['brands']]
+            if brand_lower in tier_brands_lower:
+                score += tier['rating']
+                break
 
     #vintage status
     if vintage_status == 'vintage':

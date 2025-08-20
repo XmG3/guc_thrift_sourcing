@@ -16,14 +16,13 @@ class EbayAPI:
         self.base_url = "https://api.ebay.com"
 
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        brands_path = os.path.join(script_dir, "brands.txt")
+        brands_path = os.path.join(script_dir, "brands.json")
 
         with open(brands_path, "r", encoding="utf-8") as f:
-            self.known_brands = {
-                line.strip().lower()
-                for line in f
-                if line.strip() and not line.strip().startswith('#')
-            }
+            self.brand_data = json.load(f)
+            self.known_brands = set()
+            for tier in self.brand_data.values():
+                self.known_brands.update(brand.lower() for brand in tier['brands'])
     
     def get_oauth(self):
         url = f"{self.base_url}/identity/v1/oauth2/token"
