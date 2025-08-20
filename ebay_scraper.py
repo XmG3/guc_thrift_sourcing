@@ -27,7 +27,7 @@ with open(values_path, "r", encoding="utf-8") as f:
 #default filters
 DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle", "printed", "S M L", "S M L XL", "barbie", "disney", "mattel", "doll", "toy"]
 DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21", "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Mango"]
-DEFAULT_LIKED_KEYWORDS = ["selvedge", "made in italy", "made in france", "made in japan", "rare", "archive", 
+DEFAULT_LIKED_KEYWORDS = ["selvedge", "made in italy", "made in france", "made in japan", "rare", "archive", "deadstock", 
                           "tailored", "alta moda", "archiv", "archivio", "runway", "2000s", "90s", "preloved", "90er", "2000er", "chic"]
 
 
@@ -57,8 +57,13 @@ def score(title, price, condition, brand, vintage_status, purchase_method):
             score += 2
         elif price_ratio >= 0.7:
             score -= 2
-        else:
+        elif price_ratio >= 0.5:
             score -= 4 #way overpriced
+        elif price_ratio < 0.5:
+            score -= 6
+
+    if price > 500:
+        score -= 4
 
     #condition score
     if condition in ['NEW', 'NEW_OTHER', 'NEW_WITH_DEFECTS']:

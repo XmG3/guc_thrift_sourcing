@@ -162,13 +162,15 @@ class EbayAPI:
 
             # auction or buy-it-now
             purchase_method = api_item.get('buyingOptions', [])
+
             
-            
+        
             return {
                 'title': title,
                 'price': price,
                 'condition': condition,
                 'brand': brand,
+                'location': api_item.get('itemLocation', {}).get('country', 'Unknown'),
                 'vintage_status': vintage_status,
                 'url': api_item.get('itemWebUrl', ''),
                 'item_id': api_item.get('itemId', ''),

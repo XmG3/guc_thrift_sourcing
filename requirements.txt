@@ -1,4 +1,4 @@
-flask
-gunicorn
-python-dotenv
-requests
+Flask              3.1.1
+python-dotenv      1.1.1
+requests           2.32.4
+googletrans        4.0.0rc1
