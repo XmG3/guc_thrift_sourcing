@@ -39,7 +39,7 @@ def classify_item_type(title):
             return item_type
     return None
 
-def score(title, price, condition, seller_score, brand, vintage_status, purchase_method):
+def score(title, price, condition, brand, vintage_status, purchase_method):
     
     score = 0
 
@@ -95,8 +95,8 @@ def score(title, price, condition, seller_score, brand, vintage_status, purchase
     
     return score, item_type
 
-def apply_filters(items):
-    """Filtering items based on unwanted keywords, brands, and potential resellers."""
+def apply_filters(items, deep_search = False):
+    """Filtering items based on unwanted keywords, brands"""
     filtered_items = []
 
     for item in items:
@@ -113,6 +113,12 @@ def apply_filters(items):
                 continue
     
         filtered_items.append(item)
+    
+    if deep_search == True:
+        if len(filtered_items) > 75:
+            top_score = filtered_items[0]['score'] if filtered_items else 0
+            filtered_items = [item for item in filtered_items 
+                                if item['brand'] != 'None' or item['score'] > top_score - 5]
     
     return filtered_items
 
@@ -144,7 +150,7 @@ def search_ebay(query, max_results=600, min_score = 3):
                 scored_items.append(item_data)
             
     scored_items.sort(key = lambda x: x['score'], reverse = True)
-    filtered_items = apply_filters(scored_items)
+    filtered_items = apply_filters(scored_items, deep_search = True)
     return filtered_items
 
 
