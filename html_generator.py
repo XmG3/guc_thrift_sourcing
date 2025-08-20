@@ -158,6 +158,7 @@ class HTMLGenerator:
             <div class="price">€{item['price']:.2f}</div>
             <div class="details">Condition: {item['condition']}</div>
             <div class="details">Brand: {item.get('brand', 'Unknown')}</div>
+            <div class="details">Location: {item.get('location', 'Unknown')}</div>
         </div>
     </div>"""
 
