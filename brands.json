@@ -1,0 +1,45 @@
+{
+  "s_tier": {
+    "score": 15,
+    "brands": [
+      "rick owens", "chanel", "dior", "maison margiela", "martin margiela", 
+      "mm6", "prada", "louis vuitton", "hermes", "hermès", "fendi",
+      "yves saint laurent", "ysl", "bottega veneta", "celine", 
+      "balenciaga", "givenchy", "valentino", "tom ford", "loewe",
+      "jimmy choo", "manolo blahnik", "mugler", "jacquemus",
+      "issey miyake", "yohji yamamoto", "roberto cavalli", "vivienne westwood",
+      "miu miu", "the row"
+
+    ]
+  },
+  "a_tier": {
+    "score": 12,
+    "brands": [
+      "dries van noten", "ann demeulemeester", "helmut lang", "jil sander", "lemaire",  
+      "alexander mcqueen", "jean paul gaultier", "comme des garçons", "comme des garcons", 
+      "raf simons", "craig green", "our legacy", "engineered garments", "Saint Laurent",
+      "isabel marant", "marc jacobs", "versace", "missoni", "dolce gabbana", "boss", 
+      "giorgio armani", "acne studios", "dolce & gabbana", "giuseppe zanotti", "gucci", "louboutin"
+    ]
+  },
+  "b_tier": {
+    "score": 8,
+    "brands": [
+      "hugo boss", "armani", "diesel", "burberry", "moschino", "lieve von gorp",
+      "tommy hilfiger", "calvin klein", "ralph lauren", "coach", "dirk bikkembergs", 
+      "pierre cardin", "frye", "tory burch", "stuart weitzman", "undercover",
+      "steve madden", "la perla", "lise charmel", "sies marjan", "christian lacroix",
+      "jaded london", "oscar de la renta", "donna karan", "salvatore ferragamo", "sergio rossi"
+    ]
+  },
+  "mid_tier": {
+    "score": 5,
+    "brands": [
+    "gant", "energie", "cp company", "rabanne", 
+    "ll bean", "rene caovilla", "rené caovilla", "blumarine", 
+    "vicini", "le silla", "frankies bikinis", "carhartt",
+    "romeo gigli", "delpozo", "mirror palais", 
+    "victoria's secret", "oakley", "wrangler"
+    ]
+  }
+}
