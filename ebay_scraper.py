@@ -152,7 +152,7 @@ def search_ebay(query, max_results=1000, min_score = 3):
                 item_data['item_type'] = item_type
                 scored_items.append(item_data)
             
-    scored_items.sort(key = lambda x: x['score'], reverse = True)
+    scored_items.sort(key = lambda x: (-x['score'], x['price']))
     filtered_items = apply_filters(scored_items, deep_search = True)
     return filtered_items
 
