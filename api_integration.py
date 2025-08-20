@@ -58,7 +58,7 @@ class EbayAPI:
             return self.search_single_market(query, category_id, max_results, marketplace)
         
         # Multi-marketplace search
-        if isinstance(marketplace, list) and len(marketplace) == 4:
+        if isinstance(marketplace, list) and len(marketplace) == 5:
             return self.search_multi_market(query, category_id, max_results, marketplace)
         
         # Default fallback

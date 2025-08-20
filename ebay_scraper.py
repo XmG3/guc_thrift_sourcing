@@ -126,7 +126,7 @@ def search_ebay(query, max_results=1000, min_score = 3):
     ebay_api = EbayAPI()
 
     print(f"Searching eBay.")
-    results = ebay_api.search_items(query, max_results=max_results, marketplace = ['EBAY_FR', 'EBAY_IT', 'EBAY_DE', 'EBAY_AT'])
+    results = ebay_api.search_items(query, max_results=max_results, marketplace = ['EBAY_FR', 'EBAY_IT', 'EBAY_DE', 'EBAY_AT', 'EBAY_UK'])
 
     items = results['itemSummaries']
     scored_items = []
