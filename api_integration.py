@@ -113,7 +113,7 @@ class EbayAPI:
         
         return {'itemSummaries': all_items, 'total': len(all_items)}
     
-    def search_multi_market(self, query, category_id, max_results, markets= ['EBAY_DE', 'EBAY.AT']):
+    def search_multi_market(self, query, category_id, max_results, markets= ['EBAY_DE', 'EBAY_AT', 'EBAY_FR', 'EBAY_IT', 'EBAY_US']):
         results_per_market = max_results // len(markets)
         all_items = []
         seen_ids = set()

@@ -18,16 +18,16 @@
       "dries van noten", "ann demeulemeester", "helmut lang", "jil sander", "lemaire",  
       "alexander mcqueen", "jean paul gaultier", "comme des garçons", "comme des garcons", 
       "raf simons", "craig green", "our legacy", "engineered garments", "Saint Laurent",
-      "isabel marant", "marc jacobs", "versace", "missoni", "dolce gabbana", "boss", 
+      "isabel marant", "marc jacobs", "versace", "dolce gabbana", "boss", 
       "giorgio armani", "acne studios", "dolce & gabbana", "giuseppe zanotti", "gucci", "louboutin"
     ]
   },
   "b_tier": {
     "rating": 6,
     "brands": [
-      "hugo boss", "armani", "diesel", "burberry", "moschino", "lieve von gorp",
+      "hugo boss", "armani", "diesel", "burberry", "lieve von gorp",
       "tommy hilfiger", "calvin klein", "ralph lauren", "coach", "dirk bikkembergs", 
-      "pierre cardin", "frye", "tory burch", "stuart weitzman", "undercover",
+      "pierre cardin", "frye", "tory burch", "stuart weitzman", "undercover", "mirror palais",
       "steve madden", "la perla", "lise charmel", "sies marjan", "christian lacroix",
       "jaded london", "oscar de la renta", "donna karan", "salvatore ferragamo", "sergio rossi"
     ]
@@ -38,8 +38,8 @@
     "energie", "cp company", "rabanne", 
     "ll bean", "rene caovilla", "rené caovilla", "blumarine", 
     "vicini", "le silla", "frankies bikinis", "carhartt",
-    "romeo gigli", "delpozo", "mirror palais", 
-    "victoria's secret", "oakley", "wrangler"
+    "romeo gigli", "delpozo", "moschino",
+    "victoria's secret", "oakley", "wrangler", "missoni"
     ]
   }
 }

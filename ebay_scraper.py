@@ -28,7 +28,7 @@ with open(values_path, "r", encoding="utf-8") as f:
 DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle", "printed", "S M L", "S M L XL", "barbie", "disney", "mattel", "doll", "toy"]
 DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21", "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Mango"]
 DEFAULT_LIKED_KEYWORDS = ["selvedge", "made in italy", "made in france", "made in japan", "rare", "archive", 
-                          "tailored", "alta moda", "archiv", "archivio"]
+                          "tailored", "alta moda", "archiv", "archivio", "runway", "2000s", "90s", "preloved", "90er", "2000er", "chic"]
 
 
 #basic item type classifer
@@ -91,6 +91,8 @@ def score(title, price, condition, brand, vintage_status, purchase_method):
     
     if vintage_status != 'vintage' and any (keyword.lower() in title_lower for keyword in DEFAULT_LIKED_KEYWORDS):
         score += 6
+    elif any (keyword.lower() in title_lower for keyword in DEFAULT_LIKED_KEYWORDS):
+        score += 4
 
     #purchase method
     if purchase_method == 'AUCTION':
@@ -125,11 +127,11 @@ def apply_filters(items, deep_search = False):
     
     return filtered_items
 
-def search_ebay(query, max_results=1000, min_score = 3):
+def search_ebay(query, max_results=9900, min_score = 3):
     ebay_api = EbayAPI()
 
     print(f"Searching eBay.")
-    results = ebay_api.search_items(query, max_results=max_results, marketplace = ['EBAY_FR', 'EBAY_IT', 'EBAY_DE', 'EBAY_AT', 'EBAY_UK'])
+    results = ebay_api.search_items(query, max_results=max_results, marketplace = ['EBAY_FR', 'EBAY_IT', 'EBAY_DE', 'EBAY_AT', 'EBAY_US'])
 
     items = results['itemSummaries']
     scored_items = []
@@ -159,7 +161,7 @@ def search_ebay(query, max_results=1000, min_score = 3):
 
 def main():
     query = input("Enter search query: ")
-    results = search_ebay(query, max_results = 1000, min_score=3)
+    results = search_ebay(query, max_results = 9900, min_score=3)
     if results:
         create_html(results, "ebay_results.html", query)
     
