@@ -38,6 +38,8 @@ Oakley
 LL Bean
 CP Company
 Wrangler
+Carhartt
+Comme de Garcons
 
 #Womens
 Prada
@@ -52,6 +54,7 @@ Dior
 D&G
 Dolce & Gabbana
 Dolce&Gabbana
+Dolce Gabbana
 Gant
 Valentino
 Vicini
@@ -93,3 +96,4 @@ Giuseppe Zanotti
 Christian Lacroix
 Missoni
 Sergio Rossi
+Celine

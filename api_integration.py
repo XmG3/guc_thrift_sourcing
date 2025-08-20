@@ -157,12 +157,6 @@ class EbayAPI:
             # Condition mapping from eBay API to your system
             condition = api_item.get('condition', '')
             
-            # Seller info
-            seller_info = api_item.get('seller', {})
-            # eBay returns percentage, convert to 5-point scale
-            feedback_percentage = float(seller_info.get('feedbackPercentage', 0))
-            seller_score = feedback_percentage / 20.0  # Convert 0-100% to 0-5 scale
-            
             # Brand detection from title
             brand = api_item.get('brand', '')
             if not brand:
@@ -170,18 +164,21 @@ class EbayAPI:
             
             # Vintage detection
             vintage_status = 'vintage' if 'vintage' in title.lower() or 'retro' in title.lower() else None
+
+            # auction or buy-it-now
+            purchase_method = api_item.get('buyingOptions', [])
+            
             
             return {
                 'title': title,
                 'price': price,
                 'condition': condition,
-                'seller_score': seller_score,
                 'brand': brand,
                 'vintage_status': vintage_status,
                 'url': api_item.get('itemWebUrl', ''),
                 'item_id': api_item.get('itemId', ''),
                 'image_url': api_item.get('image', {}).get('imageUrl', ''),
-                'location': api_item.get('itemLocation', {}).get('country', '')
+                'purchase_method': purchase_method
             }
         except Exception as e:
             print(f"Error extracting item data: {e}")

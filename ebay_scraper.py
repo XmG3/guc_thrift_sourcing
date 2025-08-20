@@ -39,7 +39,7 @@ def classify_item_type(title):
             return item_type
     return None
 
-def score(title, price, condition, seller_score, brand, vintage_status):
+def score(title, price, condition, seller_score, brand, vintage_status, purchase_method):
     
     score = 0
 
@@ -74,12 +74,6 @@ def score(title, price, condition, seller_score, brand, vintage_status):
         score -= 2  # Broken items
     pass
 
-    #seller score
-    if seller_score >= 4.0:
-        score+=2
-    elif seller_score >= 3.5:
-        score+=1
-
     #brand score
     if brand and brand.strip():
         if brand.lower() in known_brands:
@@ -94,6 +88,10 @@ def score(title, price, condition, seller_score, brand, vintage_status):
     
     if vintage_status != 'vintage' and any (keyword.lower() in title_lower for keyword in DEFAULT_LIKED_KEYWORDS):
         score += 6
+
+    #purchase method
+    if purchase_method == 'AUCTION':
+        score += 2
     
     return score, item_type
 
@@ -135,9 +133,9 @@ def search_ebay(query, max_results=600, min_score = 3):
                 item_data['title'],
                 item_data['price'],
                 item_data['condition'],
-                item_data['seller_score'],
                 item_data['brand'],
-                item_data['vintage_status']
+                item_data['vintage_status'],
+                item_data['purchase_method']
             )
 
             if item_score >= min_score:
