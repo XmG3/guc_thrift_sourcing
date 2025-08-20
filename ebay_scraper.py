@@ -118,11 +118,11 @@ def apply_filters(items, deep_search = False):
         if len(filtered_items) > 75:
             top_score = filtered_items[0]['score'] if filtered_items else 0
             filtered_items = [item for item in filtered_items 
-                                if item['brand'] != 'None' or item['score'] > top_score - 5]
+                                if  item['score'] > top_score - 4 or item['brand'] != 'None']
     
     return filtered_items
 
-def search_ebay(query, max_results=600, min_score = 3):
+def search_ebay(query, max_results=1000, min_score = 3):
     ebay_api = EbayAPI()
 
     print(f"Searching eBay.")
@@ -156,7 +156,7 @@ def search_ebay(query, max_results=600, min_score = 3):
 
 def main():
     query = input("Enter search query: ")
-    results = search_ebay(query, max_results = 600, min_score=3)
+    results = search_ebay(query, max_results = 1000, min_score=3)
     if results:
         create_html(results, "ebay_results.html", query)
     

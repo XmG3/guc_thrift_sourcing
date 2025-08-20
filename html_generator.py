@@ -95,6 +95,14 @@ class HTMLGenerator:
             font-size: 12px;
             margin-left: 10px;
         }
+        .cheap {
+            background: #47714A;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
         .no-image {
             background: #eee;
             display: flex;
@@ -119,8 +127,12 @@ class HTMLGenerator:
         else:
             image_html = '<div class="no-image">No Image</div>'
         
-        # Handle vintage badge
-        vintage_badge = '<span class="vintage">🏷️ VINTAGE</span>' if item.get('vintage_status') == 'vintage' else ''
+        # Handle badges
+        badges = ''
+        if item.get('vintage_status') == 'vintage':
+            badges += '<span class="vintage">🏷️ VINTAGE</span>'
+        if item['price'] < 25:
+            badges += '<span class="cheap">💰 CHEAP</span>'
         
         return f"""
     <div class="item">
@@ -131,7 +143,7 @@ class HTMLGenerator:
             <div class="score">Score: {item['score']}</div>
             <div class="item-title">
                 <a href="{item['url']}" target="_blank">{item['title']}</a>
-                {vintage_badge}
+                {badges}
             </div>
             <div class="price">€{item['price']:.2f}</div>
             <div class="details">Condition: {item['condition']}</div>
