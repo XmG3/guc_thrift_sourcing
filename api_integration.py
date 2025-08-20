@@ -1,8 +1,4 @@
-import requests
-import os
-import base64
-import json
-import time
+import requests, os, base64, json, time, re
 from api_config import APP_ID, CERT_ID, DEV_ID, OAUTH_TOKEN
 
 
@@ -185,15 +181,16 @@ class EbayAPI:
         
     def detect_brand(self, title):
         title_lower = title.lower()
-        title_words = title_lower.split()
 
-        for word in title_words:
-            clean_word = ''.join(c for c in word if c.isalnum())
-            if clean_word in self.known_brands:
-                return clean_word.title()
+        sorted_brands = sorted(self.known_brands, key=len, reverse=True)
         
-        for brand in self.known_brands:
-            if brand in title_lower:
-                return brand.title()
-            
-        return "None"
+        for brand in sorted_brands:
+            if ' ' in brand:
+                if brand in title_lower:
+                    return brand.title()
+            else:
+                pattern = r'\b' + re.escape(brand) + r'\b'
+                if re.search(pattern, title_lower):
+                    return brand.title()
+        
+        return "None" #else return 'None'

@@ -25,7 +25,7 @@
   "b_tier": {
     "rating": 6,
     "brands": [
-      "hugo boss", "armani", "diesel", "burberry", "lieve von gorp",
+      "hugo boss", "armani", "diesel", "burberry", "lieve von gorp", "eddie bauer",
       "tommy hilfiger", "calvin klein", "ralph lauren", "coach", "dirk bikkembergs", 
       "pierre cardin", "frye", "tory burch", "stuart weitzman", "undercover", "mirror palais",
       "steve madden", "la perla", "lise charmel", "sies marjan", "christian lacroix",
@@ -38,8 +38,8 @@
     "energie", "cp company", "rabanne", 
     "ll bean", "rene caovilla", "rené caovilla", "blumarine", 
     "vicini", "le silla", "frankies bikinis", "carhartt",
-    "romeo gigli", "delpozo", "moschino",
-    "victoria's secret", "oakley", "wrangler", "missoni"
+    "romeo gigli", "delpozo", "moschino", "adidas", "nike", "puma",
+    "victoria's secret", "oakley", "wrangler", "missoni", "dr. martens"
     ]
   }
 }
