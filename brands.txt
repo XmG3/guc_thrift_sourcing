@@ -43,6 +43,7 @@ Wrangler
 Prada
 Ralph Lauren
 Rene Caovilla
+René Caovilla
 Chanel
 La Perla
 Jimmy Choo
@@ -89,3 +90,5 @@ Sies Marjan
 Romeo Gigli
 Delpozo
 Giuseppe Zanotti
+Christian Lacroix
+Missoni
