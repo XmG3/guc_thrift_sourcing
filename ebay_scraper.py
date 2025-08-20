@@ -96,7 +96,7 @@ def score(title, price, condition, brand, vintage_status, purchase_method):
 
     #purchase method
     if purchase_method == 'AUCTION':
-        score += 2
+        score += 100
     
     return score, item_type
 

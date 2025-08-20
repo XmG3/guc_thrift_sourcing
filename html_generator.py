@@ -103,6 +103,14 @@ class HTMLGenerator:
             font-size: 12px;
             margin-left: 10px;
         }
+        .auction {
+            background: #111111;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
         .no-image {
             background: #eee;
             display: flex;
@@ -132,7 +140,9 @@ class HTMLGenerator:
         if item.get('vintage_status') == 'vintage':
             badges += '<span class="vintage">🏷️ VINTAGE</span>'
         if item['price'] < 25:
-            badges += '<span class="cheap">💰 CHEAP</span>'
+            badges += '<span class="cheap">CHEAP</span>'
+        if item['purchase_method'] == 'AUCTION':
+            badges += '<span class="auction">AUCTION</span>'
         
         return f"""
     <div class="item">
