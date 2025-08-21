@@ -1,4 +1,5 @@
 import requests, os, base64, json, time, re
+from deep_translator import GoogleTranslator
 from api_config import APP_ID, CERT_ID, DEV_ID, OAUTH_TOKEN
 
 
@@ -19,6 +20,16 @@ class EbayAPI:
             self.known_brands = set()
             for tier in self.brand_data.values():
                 self.known_brands.update(brand.lower() for brand in tier['brands'])
+        
+        self.translator = GoogleTranslator()
+        self.market_languages = {
+            'EBAY_DE': 'de',
+            'EBAY_AT': 'de',
+            'EBAY_FR': 'fr',
+            'EBAY_IT': 'it',
+            'EBAY_US': 'en'
+        }
+
     
     def get_oauth(self):
         url = f"{self.base_url}/identity/v1/oauth2/token"
@@ -58,6 +69,7 @@ class EbayAPI:
         
         # Default fallback
         return self.search_single_market(query, category_id, max_results, 'EBAY_DE')
+    
 
     def search_single_market(self, query, category_id = None, max_results = 200, marketplace = 'EBAY_DE'):
         if not self.oauth_token:
@@ -115,12 +127,15 @@ class EbayAPI:
         seen_ids = set()
 
         for market in markets:
-            market_results = self.search_single_market(query, category_id, results_per_market, market)
+            translated_query = self.translate_query(query, market)
+            market_results = self.search_single_market(translated_query, category_id, results_per_market, market)
             for item in market_results['itemSummaries']:
                 item_id = item.get('itemId')
                 if item_id and item_id not in seen_ids:
                     seen_ids.add(item_id)
                     all_items.append(item)
+            print(f"Searched {market} for '{translated_query}' and found {len(market_results['itemSummaries'])} results.")
+        
         return {'itemSummaries': all_items, 'total': len(all_items)}
     
     def get_details(self, item_id): 
@@ -196,3 +211,17 @@ class EbayAPI:
                     return brand.title()
         
         return "None" #else return 'None'
+    
+    def translate_query(self, query, target_market):
+        if target_market not in self.market_languages:
+            return query
+
+        target_lang = self.market_languages[target_market]
+        if target_lang == 'en':
+            return query
+        
+        try: 
+            translated = GoogleTranslator(source='en', target = target_lang).translate(query)
+            return translated
+        except:
+            return query

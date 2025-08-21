@@ -179,7 +179,7 @@ class HTMLGenerator:
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(html_content)
         
-        print(f"HTML creation successful.")        
+        print(f"HTML creation was successful.")        
         return filename
 
 # Convenience function for backward compatibility
