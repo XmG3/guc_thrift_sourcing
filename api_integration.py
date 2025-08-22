@@ -121,7 +121,7 @@ class EbayAPI:
         
         return {'itemSummaries': all_items, 'total': len(all_items)}
     
-    def search_multi_market(self, query, category_id, max_results, markets= ['EBAY_DE', 'EBAY_AT', 'EBAY_FR', 'EBAY_IT', 'EBAY_US']):
+    def search_multi_market(self, query, category_id, max_results, markets= ['EBAY_DE', 'EBAY_AT', 'EBAY_FR', 'EBAY_IT', 'EBAY_GB']):
         results_per_market = max_results // len(markets)
         all_items = []
         seen_ids = set()
@@ -222,6 +222,42 @@ class EbayAPI:
         
         try: 
             translated = GoogleTranslator(source='en', target = target_lang).translate(query)
-            return translated
         except:
             return query
+        
+        cleaned = self.clean_translation(translated, target_lang)
+        return cleaned
+    
+
+    def clean_translation(self, text: str, lang: str) -> str:
+        CLEAN_RULES = {
+            "FR": [
+                ("de costume", "costume"),
+                ("combinaison", "costume"),
+                ("hommes", "homme"),
+                ("vieux", "vintage"),
+                ("de homme", "homme"),
+                ("pour homme", "homme"),
+                ("pour femme", "femme"),
+                ("dame", "femme"),
+                ("femmes", "femme"),
+            ],
+            "IT": [
+                ("tuta", "abito"),
+                ("di uomini", "uomo"),
+                ("signora", "donna"),
+                ("uomini", "uomo"),
+                ("vecchio", "vintage"),
+            ],
+            "DE": [
+                ("Männer", "Herren"),
+                ("Frauen", "Damen"),
+                ("für Männer", "Herren"),
+                ("alt", "vintage"),
+                ("jahrgang", "vintage"),
+            ]
+        }
+        rules = CLEAN_RULES.get(lang.upper(), [])
+        for bad, good in rules:
+            text = text.replace(bad, good)
+        return text.strip()
