@@ -144,13 +144,19 @@ class HTMLGenerator:
         if item['purchase_method'] == 'AUCTION':
             badges += '<span class="auction">AUCTION</span>'
         
+        score = item['score']
+        if score == 4 and item['price']>= 500:
+            score_class = "score_four"
+        else:
+            score_class = 'score_normal'
+        
         return f"""
     <div class="item">
         <div class="item-image">
             {image_html}
         </div>
         <div class="item-details">
-            <div class="score">Score: {item['score']}</div>
+            <div class="score {score_class}">Score: {item['score']}</div>
             <div class="item-title">
                 <a href="{item['url']}" target="_blank">{item['title']}</a>
                 {badges}

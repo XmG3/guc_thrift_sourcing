@@ -25,8 +25,12 @@ with open(values_path, "r", encoding="utf-8") as f:
     item_values = json.load(f)
 
 #default filters
-DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle", "printed", "S M L", "S M L XL", "barbie", "disney", "mattel", "doll", "toy"]
-DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21", "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Mango"]
+DEFAULT_EXCLUDE_KEYWORDS = ["reseller", "resale", "wholesale", "bulk", "lot", "5 paar", "set", "pack", "bundle",
+                            "printed", "S M L", "S M L XL", "barbie", "disney", "mattel", "doll", "toy"]
+
+DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Bear", "Stradivarius", "Forever 21",
+                           "ASOS", "Boohoo", "PrettyLittleThing", "Missguided", "New Look", "Mango"]
+
 DEFAULT_LIKED_KEYWORDS = ["selvedge", "made in italy", "made in france", "made in japan", "rare", "archive", "deadstock", "authentic",
                           "tailored", "alta moda", "archiv", "archivio", "runway", "2000s", "90s", "preloved", "90er", "2000er", "chic"]
 
@@ -42,28 +46,6 @@ def classify_item_type(title):
 def score(title, price, condition, brand, vintage_status, purchase_method):
     
     score = 0
-
-    #title/price score
-    item_type = classify_item_type(title)
-    if item_type:
-        good_price = item_values[item_type]
-        price_ratio = good_price / price if price > 0 else 0
-
-        if price_ratio >= 1.5:
-            score +=8 #good deal
-        elif price_ratio >= 1.2:
-            score += 4
-        elif price_ratio >= 1.0:
-            score += 2
-        elif price_ratio >= 0.7:
-            score -= 2
-        elif price_ratio >= 0.5:
-            score -= 4 #way overpriced
-        elif price_ratio < 0.5:
-            score -= 6
-
-    if price > 500:
-        score -= 4
 
     #condition score
     if condition in ['NEW', 'NEW_OTHER', 'NEW_WITH_DEFECTS']:
@@ -102,6 +84,28 @@ def score(title, price, condition, brand, vintage_status, purchase_method):
     #purchase method
     if purchase_method == 'AUCTION':
         score += 100
+
+        #title/price score
+    item_type = classify_item_type(title)
+    if item_type:
+        good_price = item_values[item_type]
+        price_ratio = good_price / price if price > 0 else 0
+
+        if price_ratio >= 1.5:
+            score +=8 #good deal
+        elif price_ratio >= 1.2:
+            score += 4
+        elif price_ratio >= 1.0:
+            score += 2
+        elif price_ratio >= 0.7:
+            score -= 2
+        elif price_ratio >= 0.5:
+            score -= 4 #way overpriced
+        elif price_ratio < 0.5:
+            score -= 6
+
+    if price > 500:
+        score = 4
     
     return score, item_type
 
