@@ -27,7 +27,7 @@ class EbayAPI:
             'EBAY_AT': 'de',
             'EBAY_FR': 'fr',
             'EBAY_IT': 'it',
-            'EBAY_US': 'en'
+            'EBAY_GB': 'en'
         }
 
     
@@ -241,6 +241,7 @@ class EbayAPI:
                 ("pour femme", "femme"),
                 ("dame", "femme"),
                 ("femmes", "femme"),
+                ("clôture", "escrime")
             ],
             "IT": [
                 ("tuta", "abito"),
@@ -255,6 +256,7 @@ class EbayAPI:
                 ("für Männer", "Herren"),
                 ("alt", "vintage"),
                 ("jahrgang", "vintage"),
+                ("zaunschuhe", "fencing shoes"),
             ]
         }
         rules = CLEAN_RULES.get(lang.upper(), [])
