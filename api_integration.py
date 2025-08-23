@@ -215,18 +215,55 @@ class EbayAPI:
     def translate_query(self, query, target_market):
         if target_market not in self.market_languages:
             return query
-
         target_lang = self.market_languages[target_market]
         if target_lang == 'en':
             return query
         
-        try: 
-            translated = GoogleTranslator(source='en', target = target_lang).translate(query)
-        except:
-            return query
+        if "'" not in query:
+            try:
+                translated = GoogleTranslator(source='en', target=target_lang).translate(query)
+                return self.clean_translation(translated, target_lang)
+            except:
+                return query
         
-        cleaned = self.clean_translation(translated, target_lang)
-        return cleaned
+        result = []
+        current_part = ""
+        in_quotes = False
+
+        i = 0
+        while i < len(query):
+            ch = query[i]
+            if ch == "'":
+                
+                if current_part:
+                    if in_quotes:
+                        
+                        result.append(current_part.strip())
+                    else:
+                        
+                        try:
+                            translated = GoogleTranslator(source='en', target=target_lang).translate(current_part)
+                            result.append(self.clean_translation(translated, target_lang))
+                        except:
+                            result.append(current_part.strip())
+                    current_part = ""
+
+                in_quotes = not in_quotes
+            else:
+                current_part += ch
+            i += 1
+
+        if current_part:
+            if in_quotes:
+                result.append(current_part.strip())
+            else:
+                try:
+                    translated = GoogleTranslator(source='en', target=target_lang).translate(current_part)
+                    result.append(self.clean_translation(translated, target_lang))
+                except:
+                    result.append(current_part.strip())
+
+        return " ".join(part for part in result if part)
     
 
     def clean_translation(self, text: str, lang: str) -> str:
