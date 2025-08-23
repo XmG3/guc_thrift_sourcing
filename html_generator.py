@@ -145,7 +145,7 @@ class HTMLGenerator:
             badges += '<span class="auction">AUCTION</span>'
         
         score = item['score']
-        if score == 4 and item['price']>= 500:
+        if score == 4 and item['price']>= 200:
             score_class = "score_four"
         else:
             score_class = 'score_normal'

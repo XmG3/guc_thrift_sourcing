@@ -104,7 +104,7 @@ def score(title, price, condition, brand, vintage_status, purchase_method):
         elif price_ratio < 0.5:
             score -= 6
 
-    if price > 500:
+    if price > 200:
         score = 4
     
     return score, item_type
