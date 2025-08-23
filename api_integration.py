@@ -278,7 +278,9 @@ class EbayAPI:
                 ("pour femme", "femme"),
                 ("dame", "femme"),
                 ("femmes", "femme"),
-                ("clôture", "escrime")
+                ("clôture", "escrime"),
+                ("appartements", "flats"),
+                ("flats de ballerine", "ballerines")
             ],
             "IT": [
                 ("tuta", "abito"),
@@ -286,6 +288,8 @@ class EbayAPI:
                 ("signora", "donna"),
                 ("uomini", "uomo"),
                 ("vecchio", "vintage"),
+                ("Falti", "flats"),
+                ("flats di ballerina", "ballerine")
             ],
             "DE": [
                 ("Männer", "Herren"),
