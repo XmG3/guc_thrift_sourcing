@@ -1,4 +1,5 @@
 import requests, os, base64, json, time, re
+from difflib import get_close_matches
 from deep_translator import GoogleTranslator
 from api_config import APP_ID, CERT_ID, DEV_ID, OAUTH_TOKEN
 
@@ -78,6 +79,7 @@ class EbayAPI:
         all_items = []
         offset = 0
         limit_per_request = 200
+        max_retries = 2
 
         while len(all_items) < max_results:
             remaining = max_results - len(all_items)
@@ -97,7 +99,18 @@ class EbayAPI:
             if category_id:
                 params['category_ids'] = category_id
 
-            response = requests.get(url, headers=headers, params=params)
+            for retry in range(max_retries):
+                try:
+                    response = requests.get(url, headers=headers, params=params, timeout=30)
+                    break
+                except (requests.exceptions.ConnectionError, 
+                        requests.exceptions.Timeout) as e:
+                    if retry < max_retries - 1:
+                        print(f"Connection error, retrying in {2 ** retry} seconds...")
+                        time.sleep(2 ** retry)
+                    else:
+                        print(f"Failed after {max_retries} retries for {marketplace}")
+                        return {'itemSummaries': all_items, 'total': len(all_items)}
             
             if response.status_code == 429:
                 time.sleep(60)
@@ -117,7 +130,7 @@ class EbayAPI:
             offset += current_limit
             
             if max_results > 200:
-                time.sleep(0.1)
+                time.sleep(0.5)
         
         return {'itemSummaries': all_items, 'total': len(all_items)}
     
@@ -127,14 +140,14 @@ class EbayAPI:
         seen_ids = set()
 
         for market in markets:
-            translated_query = self.translate_query(query, market)
-            market_results = self.search_single_market(translated_query, category_id, results_per_market, market)
+            #translated_query = self.translate_query(query, market)
+            market_results = self.search_single_market(query, category_id, results_per_market, market)
             for item in market_results['itemSummaries']:
                 item_id = item.get('itemId')
                 if item_id and item_id not in seen_ids:
                     seen_ids.add(item_id)
                     all_items.append(item)
-            print(f"Searched {market} for '{translated_query}' and found {len(market_results['itemSummaries'])} results.")
+            print(f"Searched {market} for '{query}' and found {len(market_results['itemSummaries'])} results.")
         
         return {'itemSummaries': all_items, 'total': len(all_items)}
     
@@ -209,9 +222,15 @@ class EbayAPI:
                 pattern = r'\b' + re.escape(brand) + r'\b'
                 if re.search(pattern, title_lower):
                     return brand.title()
+        words = title_lower.split()
+        for word in words:
+            matches = get_close_matches(word, self.known_brands, n=1, cutoff = 0.9)
+            if matches:
+                return matches[0].title()
         
         return "None" #else return 'None'
     
+    """
     def translate_query(self, query, target_market):
         if target_market not in self.market_languages:
             return query
@@ -304,3 +323,5 @@ class EbayAPI:
         for bad, good in rules:
             text = text.replace(bad, good)
         return text.strip()
+    
+    """

@@ -136,7 +136,7 @@ def apply_filters(items, deep_search = False):
     
     return filtered_items
 
-def search_ebay(query, max_results=9900, min_score = 3):
+def search_ebay(query, max_results=1500, min_score = 3):
     ebay_api = EbayAPI()
 
     print(f"Searching eBay.")
