@@ -170,7 +170,7 @@ def search_ebay(query, max_results=1500, min_score = 3):
 
 def main():
     query = input("Enter search query: ")
-    results = search_ebay(query, max_results = 9900, min_score=3)
+    results = search_ebay(query, max_results = 1500, min_score=3)
     if results:
         create_html(results, "ebay_results.html", query)
     

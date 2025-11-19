@@ -72,7 +72,7 @@ class EbayAPI:
         return self.search_single_market(query, category_id, max_results, 'EBAY_DE')
     
 
-    def search_single_market(self, query, category_id = None, max_results = 200, marketplace = 'EBAY_DE'):
+    def search_single_market(self, query, category_id = None, max_results = 200, marketplace = 'EBAY_DE', exclude_countries = True):
         if not self.oauth_token:
             self.get_oauth()
 
@@ -98,6 +98,12 @@ class EbayAPI:
             }
             if category_id:
                 params['category_ids'] = category_id
+            
+            if exclude_countries:
+                if params.get('filter'):
+                    params['filter'] += ',itemLocationCountry:!US'
+                else:
+                    params['filter'] = 'itemLocationCountry:!US'
 
             for retry in range(max_retries):
                 try:
@@ -134,14 +140,14 @@ class EbayAPI:
         
         return {'itemSummaries': all_items, 'total': len(all_items)}
     
-    def search_multi_market(self, query, category_id, max_results, markets= ['EBAY_DE', 'EBAY_AT', 'EBAY_FR', 'EBAY_IT', 'EBAY_GB']):
+    def search_multi_market(self, query, category_id, max_results, markets= ['EBAY_DE', 'EBAY_AT', 'EBAY_FR', 'EBAY_IT', 'EBAY_GB'], exclude_countries = True):
         results_per_market = max_results // len(markets)
         all_items = []
         seen_ids = set()
 
         for market in markets:
             #translated_query = self.translate_query(query, market)
-            market_results = self.search_single_market(query, category_id, results_per_market, market)
+            market_results = self.search_single_market(query, category_id, results_per_market, market, exclude_countries=exclude_countries)
             for item in market_results['itemSummaries']:
                 item_id = item.get('itemId')
                 if item_id and item_id not in seen_ids:
