@@ -34,6 +34,8 @@ DEFAULT_EXCLUDE_BRANDS = ["H&M", "Zara", "Primark", "Shein", "Bershka", "Pull&Be
 DEFAULT_LIKED_KEYWORDS = ["selvedge", "made in italy", "made in france", "made in japan", "rare", "archive", "deadstock", "authentic",
                           "tailored", "alta moda", "archiv", "archivio", "runway", "2000s", "90s", "preloved", "90er", "2000er", "chic"]
 
+DEFAULT_EXCLUDE_COUNTRIES = ['US', 'CA', 'AU', 'JP']
+
 
 #basic item type classifer
 def classify_item_type(title):
@@ -109,22 +111,30 @@ def score(title, price, condition, brand, vintage_status, purchase_method):
     
     return score, item_type
 
-def apply_filters(items, deep_search = False):
-    """Filtering items based on unwanted keywords, brands"""
+def apply_filters(items, deep_search=False):
+    """Filtering items based on unwanted keywords, brands, and locations"""
     filtered_items = []
 
     for item in items:
         title_lower = item['title'].lower()
         brand_lower = item['brand'].lower() if item['brand'] != 'None' else ''
+        location = item.get('location', 'Unknown')
 
-        if any (keyword.lower() in title_lower for keyword in DEFAULT_EXCLUDE_KEYWORDS):
-                continue
+        # Location filter - exclude non-EU countries
+        if any(country.lower() in location.lower() for country in DEFAULT_EXCLUDE_COUNTRIES):
+            continue
         
-        if any (keyword.lower() in title_lower for keyword in DEFAULT_EXCLUDE_BRANDS):
-                continue
+        # Keyword filter
+        if any(keyword.lower() in title_lower for keyword in DEFAULT_EXCLUDE_KEYWORDS):
+            continue
         
-        if any (brand.lower() in brand_lower for brand in DEFAULT_EXCLUDE_BRANDS):
-                continue
+        # Brand filter (title)
+        if any(keyword.lower() in title_lower for keyword in DEFAULT_EXCLUDE_BRANDS):
+            continue
+        
+        # Brand filter (brand field)
+        if any(brand.lower() in brand_lower for brand in DEFAULT_EXCLUDE_BRANDS):
+            continue
     
         filtered_items.append(item)
     
@@ -132,7 +142,7 @@ def apply_filters(items, deep_search = False):
         if len(filtered_items) > 75:
             top_score = filtered_items[0]['score'] if filtered_items else 0
             filtered_items = [item for item in filtered_items 
-                                if  item['score'] > top_score - 4 or item['brand'] != 'None']
+                                if item['score'] > top_score - 4 or item['brand'] != 'None']
     
     return filtered_items
 
