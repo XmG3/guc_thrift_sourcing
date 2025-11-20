@@ -185,10 +185,22 @@ class EbayAPI:
             condition = api_item.get('condition', '')
             
             # Brand detection from title
-            brand = api_item.get('brand', '')
-            if not brand:
-                brand = self.detect_brand(title)
+            brand = None
+
+            if 'localizedAspects' in api_item:
+                for aspect in api_item['localizedAspects']:
+                    aspect_name = aspect.get('name', '').lower()
+                    if aspect_name in ['brand', 'marke', 'marca', 'marque', 'merk']:
+                        brand = aspect.get('value', '')
+                        if brand:
+                            break
+
+            if not brand or brand == '':
+                brand = api_item.get('brand', '')
             
+            if not brand or brand == '':
+                brand = self.detect_brand(title)
+
             # Vintage detection
             vintage_status = 'vintage' if 'vintage' in title.lower() or 'retro' in title.lower() else None
 

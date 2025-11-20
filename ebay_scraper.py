@@ -45,7 +45,7 @@ def classify_item_type(title):
             return item_type
     return None
 
-def score(title, price, condition, brand, vintage_status, purchase_method):
+def score(title, price, condition, brand, vintage_status, purchase_method, location):
     
     score = 0
 
@@ -106,6 +106,9 @@ def score(title, price, condition, brand, vintage_status, purchase_method):
         elif price_ratio < 0.5:
             score -= 6
 
+    if location == 'GB':
+        score -= 2
+
     if price > 200:
         score = 4
     
@@ -165,7 +168,8 @@ def search_ebay(query, max_results=1500, min_score = 3):
                 item_data['condition'],
                 item_data['brand'],
                 item_data['vintage_status'],
-                item_data['purchase_method']
+                item_data['purchase_method'],
+                item_data['location']
             )
 
             if item_score >= min_score:
